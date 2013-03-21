@@ -105,7 +105,14 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         if (!dd)
         {
             dd = [NSDataDetector dataDetectorWithTypes:types error:nil];
-            [dataDetectorsCache setObject:dd forKey:typesKey];
+            if (!dd)
+            {
+                NSLog(@"::sharedReusableDataDetector failed to allocate NSDataDetector");
+            }
+            else
+            {
+                [dataDetectorsCache setObject:dd forKey:typesKey];
+            }
         }
     }
     return dd;
