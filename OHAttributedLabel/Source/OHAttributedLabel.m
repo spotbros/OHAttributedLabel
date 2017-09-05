@@ -468,6 +468,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart)) {
             // Same link on touchEnded than the one on touchBegan, so trigger it
             [self processLongPressActiveLink];
+            _activeLink = nil;
         }
     }
 
