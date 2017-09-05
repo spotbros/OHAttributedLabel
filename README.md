@@ -1,3 +1,26 @@
+# Depreciation warning!
+
+Unfortunately, I **no longer have time to maintain this class**. Moreover, as since iOS6, `UILabel` now natively support `NSAttributedStrings`, **this component is totally obsolete now** (and maintaining it requires a lot of work for little benefit with recent projects all supporting iOS6+).
+
+> _Note: If you are willing to take the lead and continue to make it evolve, feel free to contact me so I can give you some GIT access ton continue to maintain it._
+
+### Migrating away from `OHAttributedLabel`
+
+#### For iOS6+ apps
+
+If you need only to support iOS6+, you can use `UILabel` and its native support for `NSAttributedString`, and use my new [`OHAttributedStringAdditions`](https://github.com/AliSoftware/OHAttributedStringAdditions) pod to build your `NSAttributedStrings` more easily.
+
+> Note that [`OHAttributedLabel`'s `NSAttributedString` categories](https://github.com/AliSoftware/OHAttributedLabel/blob/master/OHAttributedLabel/Source/NSAttributedString%2BAttributes.h) are building **CoreText-only compatible** strings and are **not compatible** with `UILabel` and `UIKit`/`TextKit`'s handling of `NSAttributedString` introduced in iOS6. That's why you need to use `OHAttributedStringAdditions` instead.
+
+iOS6+'s `NSAttributedString` and TextKit now supports a wide range of possibilities (making `OHAttributedLabel` useless anyway), letting you parse safe HTML, include attachements (images) and links, etc. So **it even fits for advanced usages**.
+See [the example project in `OHAttributedStringAdditions` repository](https://github.com/AliSoftware/OHAttributedStringAdditions).
+
+#### For very advanced usages or apps supporting iOS5 or earlier
+
+If you still need to support iOS versions 5 or earlier, **I strongly recommand the [`DTCoreText`](https://github.com/Cocoanetics/DTCoreText) library** by @Cocoanetics as a replacement — which is a way more complete framework that my own library and let you do much more stuff.
+
+---
+
 _Table of Contents_
 
 * [About these classes](#about-these-classes)
@@ -7,6 +30,7 @@ _Table of Contents_
   * [`UIAppearance` support](#uiappearance-support)
 * [How to use in your project](#how-to-use-in-your-project)
 * [Sample code & Other documentation](#sample-code--other-documentation)
+* [License & Credits](#license--credits)
 * [ChangeLog — Revisions History](#changelog-%E2%80%94-revisions-history)
 * [Projects that use this class](#projects-that-use-this-class)
 
@@ -90,17 +114,26 @@ For example, your could implement this in your `application:didFinishLoadingWith
 
 # How to use in your project
 
-There are two possible methods to include these classes in your project:
+There are three possible methods to include these classes in your project:
 
 1. Using [Cocoapods](http://cocoapods.org):
     * add `pod "OHAttributedLabel"` to your Podfile
 
-2. Manually:
+2. Include OHAttributedLabel in your project:
     * Include the `OHAttributedLabel.xcodeproj` project in your Xcode4 workspace
     * Build this `OHAttributedLabel.xcodeproj` project once for the "iOS Device" (not the simulator) _(1)_
     * Add `libOHAttributedLabel.a` **and `CoreText.framework`** to your **"Link Binary With Libraries"** Build Phase of your app project.
     * Select the `libOHAttributedLabel.a` that has just been added to your app project in your Project Navigator on the left, and change the "Location" dropdown in the File Inspector to **"Relative to Build Products"** _(1)_
     * Add the **`-ObjC` flag in the "Other Linker Flags"** Build Setting (if not present already)
+
+3. Add `libOHAttributedLabel.a` and headers in your project
+    * `cd OHAttributedLabel` 
+    * `make clean && make` (nb. **rvm** users may need to ```CC= && make clean && make```)
+    * copy the contents of the `build/Release-Combined` directory to you project (eg. `ThirdParty/OHAttributedLabel`)
+    * Add `libOHAttributedLabel.a` **and `CoreText.framework`** to your **"Link Binary With Libraries"** Build Phase of your app project.
+    * Add the OHAttributedLabel headers to your **"Header Search Path"** in Build Settings (eg. `"$(SRCROOT)/ThirdParty/OHAttributedLabel/include/**"`)
+    * Add the **`-ObjC` flag in the "Other Linker Flags"** Build Setting (if not present already)
+
 
 Then in your application code, when you want to make use of OHAttributedLabel methods, you only need to import the headers with `#import <OHAttributedLabel/OHAttributedLabel.h>` or `#import <OHAttributedLabel/NSAttributedString+Attributes.h>` etc.
 
@@ -116,6 +149,11 @@ There is no explicit docset or documentation of the class yet sorry (never had t
 * The method names should be self-explanatory (hopefully) as I respect the standard ObjC naming conventions.
 * There are doxygen/javadoc-like documentation in the headers that should also help you describe the methods
 * The provided example ("AttributedLabel Example.xcworkspace") should also demonstrate quite every typical usages — including justifying the text, dynamically changing the style/attributes of a range of text, adding custom links, make special links with a custom behavior (like catching @mention and #hashtags), and customizing the appearance/color of links.
+
+# License & Credits
+
+`OHAttributedLabel` is published under the MIT license.
+It has been created and developped by me (O.Halligon), but I'd like to thank all the [contributors](https://github.com/AliSoftware/OHAttributedLabel/graphs/contributors) too, including @mattjgalloway, @stigi and @jparise among others.
 
 # ChangeLog — Revisions History
 

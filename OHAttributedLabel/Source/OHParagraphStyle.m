@@ -31,9 +31,6 @@
 + (id)paragraphStyleWithCTParagraphStyle:(CTParagraphStyleRef)paragraphStyle
 {
     OHParagraphStyle* paraStyle = [[OHParagraphStyle alloc] initWithCTParagraphStyle:paragraphStyle];
-#if !__has_feature(objc_arc)
-    [paraStyle autorelease];
-#endif
     return paraStyle;
 }
 
@@ -48,7 +45,8 @@
     if (self)
     {
         CTParagraphStyleRef paragraphStyle = style ?: CTParagraphStyleCreate(NULL, 0);
-        CTParagraphStyleGetValueForSpecifier(paragraphStyle, kCTParagraphStyleSpecifierLineSpacing,sizeof(_lineSpacing), &_lineSpacing);
+        CTParagraphStyleGetValueForSpecifier(paragraphStyle, kCTParagraphStyleSpecifierMinimumLineSpacing,sizeof(_lineSpacing), &_lineSpacing);
+        CTParagraphStyleGetValueForSpecifier(paragraphStyle, kCTParagraphStyleSpecifierMaximumLineSpacing,sizeof(_lineSpacing), &_lineSpacing);
         CTParagraphStyleGetValueForSpecifier(paragraphStyle, kCTParagraphStyleSpecifierParagraphSpacing, sizeof(_paragraphSpacing), &_paragraphSpacing);
         CTParagraphStyleGetValueForSpecifier(paragraphStyle, kCTParagraphStyleSpecifierAlignment,sizeof(_textAlignment), &_textAlignment);
         CTParagraphStyleGetValueForSpecifier(paragraphStyle, kCTParagraphStyleSpecifierLineBreakMode, sizeof(_lineBreakMode), &_lineBreakMode);
@@ -69,10 +67,11 @@
 
 - (CTParagraphStyleRef)createCTParagraphStyle
 {
-    const int kSettingsCount = 12;
+    const int kSettingsCount = 13;
     CTParagraphStyleSetting settings[kSettingsCount] =
     {
-        { kCTParagraphStyleSpecifierLineSpacing, sizeof(_lineSpacing), &_lineSpacing },
+        { kCTParagraphStyleSpecifierMinimumLineSpacing, sizeof(_lineSpacing), &_lineSpacing },
+        { kCTParagraphStyleSpecifierMaximumLineSpacing, sizeof(_lineSpacing), &_lineSpacing },
         { kCTParagraphStyleSpecifierParagraphSpacing, sizeof(_paragraphSpacing), &_paragraphSpacing },
         { kCTParagraphStyleSpecifierAlignment, sizeof(_textAlignment), &_textAlignment },
         { kCTParagraphStyleSpecifierLineBreakMode, sizeof(_lineBreakMode), &_lineBreakMode },
