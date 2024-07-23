@@ -540,7 +540,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     
     if (openLink)
     {
-        [[UIApplication sharedApplication] openURL:linkToOpen.extendedURL];
+        [[UIApplication sharedApplication] openURL:linkToOpen.extendedURL options:@{} completionHandler:nil];
     }
 }
 
